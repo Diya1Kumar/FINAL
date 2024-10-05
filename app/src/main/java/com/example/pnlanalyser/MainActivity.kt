@@ -79,13 +79,17 @@ fun MyApp() {
             }
             composable("Login") {
                 Login {
-                    navController.navigate("Main")
+                    navController.navigate("Dashboard")
                 }
             }
             composable("Register") {
-                Register {
-                    navController.navigate("Login")
-                }
+                Register (
+                    navigateToLoginScreen = { navController.navigate("Login") },
+                    navigateToFirstScreen =  { navController.navigate("Dashboard") }
+                )
+            }
+            composable("Dashboard") {
+                dashboardPage {}
             }
         }
     }

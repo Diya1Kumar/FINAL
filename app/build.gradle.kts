@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,7 +53,22 @@ android {
 dependencies {
     val nav_version = "2.7.7"
 
+    dependencies {
+        val roomVersion = "2.4.3"
+
+        // Database (Room)
+        implementation("androidx.room:room-runtime:$roomVersion")
+        kapt("androidx.room:room-compiler:$roomVersion") // Annotation processor for Room
+        implementation("androidx.room:room-ktx:$roomVersion") // Kotlin extensions for Room
+    }
+
+
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    //icons
+    implementation ("androidx.compose.material:material-icons-extended:1.0.5")
+    //shapes
+    implementation ("androidx.compose.material3:material3:<version>")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

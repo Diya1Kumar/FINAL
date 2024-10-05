@@ -73,6 +73,7 @@ fun Login(navigateToFirstScreen:()->Unit){
             TextField(
                 value = username.value,
                 onValueChange = { username.value = it },
+                singleLine = true,
                 placeholder = { Text(text = "Username") })
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -88,6 +89,7 @@ fun Login(navigateToFirstScreen:()->Unit){
         TextField(
             value = password.value,
             onValueChange = { password.value = it },
+            singleLine = true,
             placeholder = { Text(text = "Password") })
     }
         Spacer(modifier = Modifier.height(20.dp))

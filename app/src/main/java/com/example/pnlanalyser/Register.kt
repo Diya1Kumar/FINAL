@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Register(navigateToLoginScreen: () -> Unit) {
+fun Register(navigateToLoginScreen: () -> Unit, navigateToFirstScreen:() -> Unit) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
@@ -87,6 +87,7 @@ fun Register(navigateToLoginScreen: () -> Unit) {
                 value = username.value,
                 onValueChange = { username.value = it },
                 placeholder = { Text(text = "Username") },
+                singleLine = true,
                 shape = RoundedCornerShape(12.dp)// Placeholder for username
             )
         }
@@ -104,6 +105,7 @@ fun Register(navigateToLoginScreen: () -> Unit) {
                 value = email.value,
                 onValueChange = { email.value = it },
                 placeholder = { Text(text = "Email") },
+                singleLine = true,
                 shape = RoundedCornerShape(12.dp)// Placeholder for password
             )
         }
@@ -123,11 +125,12 @@ fun Register(navigateToLoginScreen: () -> Unit) {
                     onValueChange = { password.value = it },
                     placeholder = { Text(text = "Create Password") },
                     shape = RoundedCornerShape(12.dp),
+                    singleLine = true,
                     modifier = Modifier.background(Color.White, shape = RoundedCornerShape(12.dp)))// Placeholder for password
 
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {navigateToLoginScreen()}) {
+            Button(onClick = {navigateToFirstScreen()}) {
                 Text(text = "Register")
                 
             }
@@ -161,6 +164,6 @@ fun RegisterPreview() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        Register({})
+        Register({},{})
     }
 }
