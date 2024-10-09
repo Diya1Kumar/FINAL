@@ -27,9 +27,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Entity
+
+/*
+@Entity(tableName = "user-table")
+*/
 
 @Composable
-fun Login(navigateToFirstScreen:()->Unit){
+fun <AppDatabase> Login(db: AppDatabase? = null, navigateToFirstScreen: () -> Unit){
     val username = remember {
         mutableStateOf("")
     }
@@ -90,7 +95,7 @@ fun Login(navigateToFirstScreen:()->Unit){
             value = password.value,
             onValueChange = { password.value = it },
             singleLine = true,
-            placeholder = { Text(text = "Password") })
+            placeholder = { Text(text = "Password")})
     }
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick = {navigateToFirstScreen()}, modifier = Modifier.padding(0.dp).background(color = Color.White)) {
@@ -113,6 +118,6 @@ fun LoginPreview() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        Login({})
+        Login<Any>(navigateToFirstScreen = {})
     }
 }
