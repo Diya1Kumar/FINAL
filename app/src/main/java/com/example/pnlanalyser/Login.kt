@@ -2,14 +2,7 @@ package com.example.pnlanalyser
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -27,28 +20,23 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.Entity
 
-/*
-@Entity(tableName = "user-table")
-*/
 
 @Composable
-fun <AppDatabase> Login(db: AppDatabase? = null, navigateToFirstScreen: () -> Unit){
-    val username = remember {
-        mutableStateOf("")
-    }
-    val password = remember {
-        mutableStateOf("")
-    }
-    Column(modifier = Modifier.fillMaxSize(),
+fun Login(navigateToFirstScreen: () -> Unit) {
+    val username = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally)
-    {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f, fill = false),
+                .padding(top = 40.dp), // Adjust top padding as needed
             contentAlignment = Alignment.TopEnd
         ) {
             Text(
@@ -58,54 +46,66 @@ fun <AppDatabase> Login(db: AppDatabase? = null, navigateToFirstScreen: () -> Un
                     color = Color.White,
                     fontSize = 70.sp
                 ),
-                modifier = Modifier.padding(top = 200.dp,end = 50.dp)// Optional: Add padding to the end
+                modifier = Modifier.padding(top = 140.dp,end = 50.dp) // Optional: Add padding to the end
             )
         }
-    }
-    Column(modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(26.dp))
-        Box(
+
+        // Input Fields
+        Column(
             modifier = Modifier
-                .shadow(8.dp, RoundedCornerShape(12.dp)) // Shadow applied here
-                .background(
-                    Color.White,
-                    shape = RoundedCornerShape(12.dp)
-                ) // Background color and shape
-                .padding(0.dp)
+                .fillMaxSize()
+                .padding(top = 80.dp), // Add padding to move inputs down
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
-                value = username.value,
-                onValueChange = { username.value = it },
-                singleLine = true,
-                placeholder = { Text(text = "Username") })
+            Spacer(modifier = Modifier.height(26.dp))
+
+            // Username Field
+            Box(
+                modifier = Modifier
+                    .shadow(8.dp, RoundedCornerShape(12.dp))
+                    .background(Color.White, shape = RoundedCornerShape(12.dp))
+                    .padding(0.dp)
+            ) {
+                TextField(
+                    value = username.value,
+                    onValueChange = { username.value = it },
+                    singleLine = true,
+                    placeholder = { Text(text = "Username") }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Password Field
+            Box(
+                modifier = Modifier
+                    .shadow(8.dp, RoundedCornerShape(12.dp))
+                    .background(Color.White, shape = RoundedCornerShape(12.dp))
+                    .padding(0.dp)
+            ) {
+                TextField(
+                    value = password.value,
+                    onValueChange = { password.value = it },
+                    singleLine = true,
+                    placeholder = { Text(text = "Password") }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Login Button
+            Button(
+                onClick = {
+                    // Here you can add the logic to check credentials and navigate if successful
+                    navigateToFirstScreen()
+                },
+                modifier = Modifier.padding(0.dp).background(color = Color.White)
+            ) {
+                Text(text = "Login")
+            }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Box(
-            modifier = Modifier
-                .shadow(8.dp, RoundedCornerShape(12.dp)) // Shadow applied here
-                .background(
-                    Color.White,
-                    shape = RoundedCornerShape(12.dp)
-                ) // Background color and shape
-                .padding(0.dp)
-        ){
-        TextField(
-            value = password.value,
-            onValueChange = { password.value = it },
-            singleLine = true,
-            placeholder = { Text(text = "Password")})
     }
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick = {navigateToFirstScreen()}, modifier = Modifier.padding(0.dp).background(color = Color.White)) {
-            Text(text = "login")
-    }
-
-    }
-
-        
-
 }
 
 @Preview(showBackground = true)
@@ -118,6 +118,7 @@ fun LoginPreview() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        Login<Any>(navigateToFirstScreen = {})
+        Login(navigateToFirstScreen = {})
     }
 }
+

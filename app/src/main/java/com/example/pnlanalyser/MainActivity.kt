@@ -1,8 +1,4 @@
 package com.example.pnlanalyser
-
-import AppDatabase
-import UserViewModel
-import UserViewModelFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,63 +6,32 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
-import com.example.pnlanalyser.ui.theme.PnlAnalyserTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
-    private lateinit var db: AppDatabase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Initialize Room database
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "planalyser-database"
-        ).build()
-
         enableEdgeToEdge()
+
         setContent {
-            // Pass the database to MyApp
-            MyApp(db)
+            MyApp()
         }
     }
 }
 
 @Composable
-fun MyApp(db: AppDatabase) {
+fun MyApp() {
     val navController = rememberNavController()
-
-    // Initialize the ViewModel using the factory
-    val userDao = db.userDao()
-    val userViewModel: UserViewModel = viewModel(factory = UserViewModelFactory(userDao))
-
-    // Fetch user data when the app starts
-    userViewModel.fetchUser()
-
-    // Observe user data with LiveData
-    val user by userViewModel.user.observeAsState() // Initialize to null
-
     Box(modifier = Modifier.fillMaxSize()) {
         // Background image logic based on current route
         val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -81,20 +46,6 @@ fun MyApp(db: AppDatabase) {
             }
         }
 
-        // Display user information or a message if not found
-        if (user != null) {
-            // User found, display user information
-            Text(
-                text = "Welcome, ${user.username}!",
-                modifier = Modifier.padding(16.dp)
-            )
-        } else {
-            // No user found, display a message or any other UI element
-            Text(
-                text = "No user found.",
-                modifier = Modifier.padding(16.dp)
-            )
-        }
 
         // Navigation setup
         NavHost(navController = navController, startDestination = "main") {
@@ -105,19 +56,33 @@ fun MyApp(db: AppDatabase) {
                 )
             }
             composable("Login") {
-                Login(db) {
+                Login() { // Commenting out db argument for now
                     navController.navigate("Dashboard")  // Navigate to Dashboard after login
                 }
             }
             composable("Register") {
                 Register(
-                    db,
                     navigateToLoginScreen = { navController.navigate("Login") },
                     navigateToFirstScreen = { navController.navigate("Dashboard") }  // Navigate to Dashboard after registration
                 )
             }
             composable("Dashboard") {
-                dashboardPage {}
+                DashboardPage(
+                    navigateToPurchase = { navController.navigate("Purchase")},
+                    navigateToSale = {navController.navigate("Sale")}
+                )
+            }
+            composable("Purchase"){
+                PurchaseEntryScreen(
+                    navigateToPurchase = {navController.navigate("Purchase")},
+                    navigateToFirstScreen = {navController.navigate("Dashboard")}
+                )
+            }
+            composable("Sale"){
+                SaleEntryScreen(
+                    navigateToSale = {navController.navigate("Sale")},
+                    navigateToFirstScreen = {navController.navigate("Dashboard")}
+                )
             }
         }
     }

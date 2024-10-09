@@ -53,13 +53,15 @@ android {
 
 dependencies {
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.firestore.ktx)
     val nav_version = "2.7.7"
     val room_version ="2.5.0"
 
     implementation ("androidx.room:room-runtime:$room_version")
+    implementation ("androidx.room:room-runtime:2.5.0")
 
-    kapt ("androidx.room:room-compiler:$room_version") // KAPT for annotation processing
     implementation ("androidx.room:room-ktx:$room_version") // For coroutines support
+    implementation ("androidx.room:room-ktx:2.5.0")
     // Other dependencies...
     implementation("androidx.navigation:navigation-compose:$nav_version")
     //icons

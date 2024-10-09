@@ -1,7 +1,6 @@
 package com.example.pnlanalyser
 
-import AppDatabase
-import User
+//import AppDatabase
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +41,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun Register(
-    db: AppDatabase,
+    // db: AppDatabase, // Commenting out the db argument for now
     navigateToLoginScreen: () -> Unit,
     navigateToFirstScreen: () -> Unit
 ) {
@@ -131,7 +130,8 @@ fun Register(
             // Register button
             Button(onClick = {
                 if (username.value.isNotBlank() && email.value.isNotBlank() && password.value.isNotBlank()) {
-                    // Register the user in the database
+                    // Register the user in the database (commented out)
+                    /*
                     CoroutineScope(Dispatchers.IO).launch {
                         val user = User(username = username.value, email = email.value, password = password.value)
                         db.userDao().insert(user)
@@ -141,6 +141,7 @@ fun Register(
                             navigateToFirstScreen()
                         }
                     }
+                    */
                 } else {
                     // Display error message if fields are empty
                     errorMessage.value = "All fields must be filled out"
@@ -180,7 +181,7 @@ fun RegisterPreview() {
         )
         // Use a mock or in-memory database instance for preview
         Register(
-            db = Room.inMemoryDatabaseBuilder(LocalContext.current, AppDatabase::class.java).build(),
+            // db = Room.inMemoryDatabaseBuilder(LocalContext.current, AppDatabase::class.java).build(), // Commented out for now
             navigateToLoginScreen = {},
             navigateToFirstScreen = {}
         )

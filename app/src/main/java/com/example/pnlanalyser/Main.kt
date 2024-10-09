@@ -35,38 +35,58 @@ val Kurale = FontFamily(
 )
 
 @Composable
-fun Main(navigateToLoginScreen:()->Unit, navigateToRegisterScreen:()->Unit){
-    Column (modifier = Modifier.fillMaxSize(),
+fun Main(navigateToLoginScreen: () -> Unit, navigateToRegisterScreen: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally){
-
-        Text(text = "PnL Analyser",
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "PnL Analyser",
             style = TextStyle(
                 fontFamily = Kurale,
                 fontSize = 50.sp
             )
         )
-        Row {
-            TextButton(onClick = {navigateToLoginScreen()},
-                modifier = Modifier.padding(0.dp))
-                {
-                    Text(text = "Login", modifier = Modifier.padding(horizontal = 0.dp), color = Color(0xFF4D4DE5), style = TextStyle(textDecoration = TextDecoration.Underline))
 
-                }
-            Text(text = "or",modifier = Modifier.padding(horizontal = 0.dp, vertical = 11.dp))
-            TextButton(onClick = {
-                navigateToRegisterScreen()
-            }, modifier = Modifier.padding(0.dp)){
-                Text(text = "Register",modifier = Modifier.padding(horizontal = 0.dp), color = Color(0xFF4D4DE5), style = TextStyle(textDecoration = TextDecoration.Underline))
-
+        // Use a Row for all elements that should be aligned in the same line
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(vertical = 9.dp).padding(horizontal = 0.dp)// Adjust vertical padding as needed
+        ) {
+            // Login Button
+            TextButton(onClick = { navigateToLoginScreen() }) {
+                Text(
+                    text = "Login",
+                    color = Color(0xFF4D4DE5),
+                    style = TextStyle(textDecoration = TextDecoration.Underline)
+                )
             }
-            Text(text = "with us",modifier = Modifier.padding(horizontal = 0.dp, vertical = 11.dp))
-
+            // "or" Text
+            Text(
+                text = "or",
+                modifier = Modifier.padding(horizontal = 0.dp) // Space between buttons
+            )
+            // Register Button
+            TextButton(onClick = { navigateToRegisterScreen() }) {
+                Text(
+                    text = "Register",
+                    color = Color(0xFF4D4DE5),
+                    style = TextStyle(textDecoration = TextDecoration.Underline)
+                )
+                Text(
+                    text = "with us",
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
         }
 
-    }
+        // "with us" Text below the buttons
 
+    }
 }
+
 
 
 @Preview(showBackground = true)
