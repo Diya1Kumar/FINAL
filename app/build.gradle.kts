@@ -52,36 +52,57 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.firebase.firestore.ktx)
+    // Room dependencies
+    implementation("androidx.room:room-runtime:2.5.0")
+    implementation(libs.firebase.firestore.ktx) // Use the latest version
+    kapt("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-ktx:2.5.0") // For coroutine support
+    androidTestImplementation("androidx.room:room-testing:2.5.0")
+
+    // Compose dependencies
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.material3:material3:1.1.0") // Use the latest version for Material3
+    implementation("androidx.compose.material:material-icons-extended:1.5.0") // Use the latest version
+    implementation(platform(libs.androidx.compose.bom))
+
+    // Navigation Component
     val nav_version = "2.7.7"
-    val room_version ="2.5.0"
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9") // or latest stable version
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9") // or latest stable version
+    val room_version = "2.5.0"
 
     implementation ("androidx.room:room-runtime:$room_version")
-    implementation ("androidx.room:room-runtime:2.5.0")
+    kapt ("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
 
-    implementation ("androidx.room:room-ktx:$room_version") // For coroutines support
-    implementation ("androidx.room:room-ktx:2.5.0")
-    // Other dependencies...
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-    //icons
-    implementation ("androidx.compose.material:material-icons-extended:1.0.5")
-    //shapes
-    implementation ("androidx.compose.material3:material3:<version>")
+    // Lifecycle components
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1") // Use the latest version
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1") // Use the latest version
 
+    // Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0") // Use the latest version
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0") // Use the latest version
+
+    // SQLite JDBC (not typically used in Android)
+    // If you need SQLite in an Android project, consider using Room's built-in SQLite support
+    // implementation("org.xerial.sqlite-jdbc:sqlite-jdbc:3.36.0.3")
+
+    // Other dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+
+    // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Debugging dependencies
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

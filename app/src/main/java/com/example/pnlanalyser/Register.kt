@@ -1,56 +1,36 @@
 package com.example.pnlanalyser
 
-//import AppDatabase
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.Room
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun Register(
-    // db: AppDatabase, // Commenting out the db argument for now
     navigateToLoginScreen: () -> Unit,
-    navigateToFirstScreen: () -> Unit
+    navigateToFirstScreen: () -> Unit,
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
-
-    // State for error message
     val errorMessage = remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -63,7 +43,7 @@ fun Register(
                 .weight(1f, fill = false),
             contentAlignment = Alignment.TopEnd
         ) {
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = "Register",
@@ -72,7 +52,7 @@ fun Register(
                     color = Color.White,
                     fontSize = 60.sp
                 ),
-                modifier = Modifier.padding(top = 220.dp, end = 50.dp)
+                modifier = Modifier.padding(top = 180.dp, end = 50.dp)
             )
         }
 
@@ -121,33 +101,14 @@ fun Register(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Error message
-            if (errorMessage.value.isNotEmpty()) {
-                Text(text = errorMessage.value, color = Color.Red)
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            // Register button
-            Button(onClick = {
-                if (username.value.isNotBlank() && email.value.isNotBlank() && password.value.isNotBlank()) {
-                    // Register the user in the database (commented out)
-                    /*
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val user = User(username = username.value, email = email.value, password = password.value)
-                        db.userDao().insert(user)
-
-                        // Navigate to the first screen on success
-                        withContext(Dispatchers.Main) {
-                            navigateToFirstScreen()
-                        }
-                    }
-                    */
-                } else {
-                    // Display error message if fields are empty
-                    errorMessage.value = "All fields must be filled out"
+            Button(
+                onClick = {
+                    navigateToLoginScreen() // Navigate to next screen if login successful
                 }
-            }) {
-                Text(text = "Register")
+                ,
+                enabled = !isLoading
+            ) {
+                Text(text = if (isLoading) "Loading..." else "Register")
             }
 
             // Navigate to login screen
@@ -169,21 +130,13 @@ fun Register(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RegisterPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.loginpage), // Replace with your image resource
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-        // Use a mock or in-memory database instance for preview
-        Register(
-            // db = Room.inMemoryDatabaseBuilder(LocalContext.current, AppDatabase::class.java).build(), // Commented out for now
-            navigateToLoginScreen = {},
-            navigateToFirstScreen = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun RegisterPreview() {
+//    // Mock userViewModel for preview purposes
+//    val mockUserViewModel = UserViewModel(object : UserDao {
+//        override suspend fun insert(user: User) {
+//            // No-op for preview
+//        }
+//
+//        override suspend fun getUser(userName: String, password: String): User?

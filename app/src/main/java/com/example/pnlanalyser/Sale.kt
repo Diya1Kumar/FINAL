@@ -16,11 +16,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @Composable
-fun SaleEntryScreen(navigateToSale: () -> Unit, navigateToFirstScreen:()->Unit) {
+fun SaleEntryScreen(
+
+    navigateToFirstScreen: () -> Unit
+) {
     val itemName = remember { mutableStateOf("") }
     val salePrice = remember { mutableStateOf("") }
     val quantitySold = remember { mutableStateOf("") }
+    val companySold = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -61,9 +66,18 @@ fun SaleEntryScreen(navigateToSale: () -> Unit, navigateToFirstScreen:()->Unit) 
         )
         Spacer(modifier = Modifier.height(16.dp))
 
+        TextField(
+            value = companySold.value,
+            onValueChange = { companySold.value = it },
+            label = { Text("Sold to Company/Individual") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             onClick = {
-                // Handle save action
+
+                navigateToFirstScreen()
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
@@ -74,17 +88,11 @@ fun SaleEntryScreen(navigateToSale: () -> Unit, navigateToFirstScreen:()->Unit) 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick ={navigateToFirstScreen()},
+            onClick = { navigateToFirstScreen() },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Back to Dashboard")
         }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun SalePreview() {
-    SaleEntryScreen (navigateToFirstScreen = {}, navigateToSale = {})
-
 }

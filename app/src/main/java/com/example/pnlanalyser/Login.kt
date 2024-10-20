@@ -7,15 +7,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,9 +19,13 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun Login(navigateToFirstScreen: () -> Unit) {
+fun Login(
+    navigateToFirstScreen: () -> Unit
+) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -36,17 +36,17 @@ fun Login(navigateToFirstScreen: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 40.dp), // Adjust top padding as needed
+                .padding(top = 40.dp),
             contentAlignment = Alignment.TopEnd
         ) {
             Text(
                 text = "Login",
                 style = TextStyle(
-                    fontFamily = Kurale,
+                    fontFamily = Kurale,  // Replace with your font
                     color = Color.White,
                     fontSize = 70.sp
                 ),
-                modifier = Modifier.padding(top = 140.dp,end = 50.dp) // Optional: Add padding to the end
+                modifier = Modifier.padding(top = 140.dp, end = 50.dp)
             )
         }
 
@@ -54,7 +54,7 @@ fun Login(navigateToFirstScreen: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 80.dp), // Add padding to move inputs down
+                .padding(top = 80.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -97,28 +97,33 @@ fun Login(navigateToFirstScreen: () -> Unit) {
             // Login Button
             Button(
                 onClick = {
-                    // Here you can add the logic to check credentials and navigate if successful
-                    navigateToFirstScreen()
-                },
-                modifier = Modifier.padding(0.dp).background(color = Color.White)
+                            navigateToFirstScreen() // Navigate to next screen if login successful
+                        }
+                ,
+                enabled = !isLoading
             ) {
-                Text(text = "Login")
+                Text(text = if (isLoading) "Loading..." else "Login")
+            }
+
+            // Error message display
+            errorMessage?.let {
+                Text(text = it, color = Color.Red)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.loginpage), // Replace with your image resource
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-        Login(navigateToFirstScreen = {})
-    }
-}
-
+// Optional: Preview function for the Composable
+//@Preview(showBackground = true)
+//@Composable
+//fun LoginPreview() {
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        Image(
+//            painter = painterResource(id = R.drawable.loginpage), // Replace with your image resource
+//            contentDescription = null,
+//            contentScale = ContentScale.Crop,
+//            modifier = Modifier.fillMaxSize()
+//        )
+//        Login(navigateToFirstScreen = {}, userViewModel = mockUserViewModel)
+//    }
+//}

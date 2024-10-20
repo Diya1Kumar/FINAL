@@ -42,7 +42,7 @@ fun Main(navigateToLoginScreen: () -> Unit, navigateToRegisterScreen: () -> Unit
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "PnL Analyser",
+            text = "P&L Analyser",
             style = TextStyle(
                 fontFamily = Kurale,
                 fontSize = 50.sp
