@@ -1,6 +1,5 @@
 package com.example.pnlanalyser
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,14 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Login(
-    navigateToFirstScreen: () -> Unit
+    navigateToFirstScreen: () -> Unit,
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -97,9 +95,9 @@ fun Login(
             // Login Button
             Button(
                 onClick = {
-                            navigateToFirstScreen() // Navigate to next screen if login successful
-                        }
-                ,
+
+                    navigateToFirstScreen() // Navigate to next screen if login successful
+                },
                 enabled = !isLoading
             ) {
                 Text(text = if (isLoading) "Loading..." else "Login")
@@ -112,18 +110,3 @@ fun Login(
         }
     }
 }
-
-// Optional: Preview function for the Composable
-//@Preview(showBackground = true)
-//@Composable
-//fun LoginPreview() {
-//    Box(modifier = Modifier.fillMaxSize()) {
-//        Image(
-//            painter = painterResource(id = R.drawable.loginpage), // Replace with your image resource
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier.fillMaxSize()
-//        )
-//        Login(navigateToFirstScreen = {}, userViewModel = mockUserViewModel)
-//    }
-//}

@@ -25,6 +25,7 @@ fun PurchaseEntryScreen(
     val itemPrice = remember { mutableStateOf("") }
     val quantity = remember { mutableStateOf("") }
     val companyName = remember { mutableStateOf("") }
+    val purchase_date = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -72,10 +73,18 @@ fun PurchaseEntryScreen(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = purchase_date.value,
+            onValueChange = { purchase_date.value = it },
+            label = { Text("Purchase Date") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
 
         Button(
             onClick = {
-                // Convert string inputs to appropriate types
+
 
                 navigateToFirstScreen()
             },

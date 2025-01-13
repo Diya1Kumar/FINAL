@@ -1,6 +1,5 @@
 package com.example.pnlanalyser
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,9 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Register(
@@ -27,10 +26,8 @@ fun Register(
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val errorMessage = remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
-
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -78,16 +75,16 @@ fun Register(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Email field
-            TextField(
-                value = email.value,
-                onValueChange = { email.value = it },
-                placeholder = { Text(text = "Email") },
-                singleLine = true,
-                modifier = Modifier
-                    .shadow(8.dp, RoundedCornerShape(12.dp))
-                    .background(Color.White, shape = RoundedCornerShape(12.dp))
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+//            TextField(
+//                value = email.value,
+//                onValueChange = { email.value = it },
+//                placeholder = { Text(text = "Email") },
+//                singleLine = true,
+//                modifier = Modifier
+//                    .shadow(8.dp, RoundedCornerShape(12.dp))
+//                    .background(Color.White, shape = RoundedCornerShape(12.dp))
+//            )
+//            Spacer(modifier = Modifier.height(16.dp))
 
             // Password field
             TextField(
@@ -103,15 +100,22 @@ fun Register(
 
             Button(
                 onClick = {
-                    navigateToLoginScreen() // Navigate to next screen if login successful
-                }
-                ,
+                    isLoading = true
+                    errorMessage = ""
+
+
+                           navigateToFirstScreen()
+
+                },
                 enabled = !isLoading
             ) {
                 Text(text = if (isLoading) "Loading..." else "Register")
             }
 
-            // Navigate to login screen
+            if (errorMessage.isNotEmpty()) {
+                Text(text = errorMessage, color = Color.Red)
+            }
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -129,14 +133,3 @@ fun Register(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun RegisterPreview() {
-//    // Mock userViewModel for preview purposes
-//    val mockUserViewModel = UserViewModel(object : UserDao {
-//        override suspend fun insert(user: User) {
-//            // No-op for preview
-//        }
-//
-//        override suspend fun getUser(userName: String, password: String): User?
