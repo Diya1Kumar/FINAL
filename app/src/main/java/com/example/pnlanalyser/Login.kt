@@ -16,10 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pnlanalyser.network.LoginRequest
-import com.example.pnlanalyser.network.LoginResponse
-import com.example.pnlanalyser.network.RetrofitClient
-import retrofit2.Call
+
 
 
 @Composable
@@ -73,8 +70,6 @@ fun Login(
                 modifier = Modifier
                     .shadow(8.dp, RoundedCornerShape(12.dp))
                     .background(Color.White, shape = RoundedCornerShape(12.dp))
-                    .fillMaxWidth()
-                    .padding(16.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -88,8 +83,6 @@ fun Login(
                 modifier = Modifier
                     .shadow(8.dp, RoundedCornerShape(12.dp))
                     .background(Color.White, shape = RoundedCornerShape(12.dp))
-                    .fillMaxWidth()
-                    .padding(16.dp)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -97,33 +90,12 @@ fun Login(
             // Login Button
             Button(
                 onClick = {
-                    isLoading = true
-                    val loginRequest = LoginRequest(username.value, password.value)
-                    RetrofitClient.apiService.login(loginRequest).enqueue(object : retrofit2.Callback<LoginResponse> {
-                        override fun onResponse(call: Call<LoginResponse>, response: retrofit2.Response<LoginResponse>) {
-                            isLoading = false
-                            if (response.isSuccessful) {
-                                // Save token (for example, in SharedPreferences)
-                                navigateToFirstScreen()
-                            } else {
-                                errorMessage = "Invalid credentials"
-                            }
-                        }
-
-                        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                            isLoading = false
-                            errorMessage = "Error: ${t.message}"
-                        }
-                    })
+                    navigateToFirstScreen()
                 },
-                enabled = !isLoading
+                enabled = !isLoading,
+                modifier = Modifier.padding(8.dp) // Optional padding for the button
             ) {
                 Text(text = if (isLoading) "Loading..." else "Login")
-            }
-
-            // Error message
-            if (!errorMessage.isNullOrEmpty()) {
-                Text(text = errorMessage!!, color = Color.Red, modifier = Modifier.padding(16.dp))
             }
         }
     }

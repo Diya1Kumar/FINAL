@@ -18,9 +18,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pnlanalyser.network.RegisterRequest
-import com.example.pnlanalyser.network.RetrofitClient
-import retrofit2.Call
+
 
 @Composable
 fun Register(
@@ -103,31 +101,14 @@ fun Register(
 
             Button(
                 onClick = {
-                    isLoading = true
-                    errorMessage = ""
-
-                    // Call Retrofit API to register user
-                    val registerRequest = RegisterRequest(username.value, password.value)
-                    RetrofitClient.apiService.register(registerRequest).enqueue(object : retrofit2.Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
-                            if (response.isSuccessful) {
-                                navigateToFirstScreen() // Navigate after successful registration
-                            } else {
-                                errorMessage = "Registration failed"
-                            }
-                            isLoading = false
-                        }
-
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            errorMessage = "Error: ${t.message}"
-                            isLoading = false
-                        }
-                    })
+                    navigateToFirstScreen()
                 },
+                modifier = Modifier.padding(8.dp), // Optional padding for the button
                 enabled = !isLoading
             ) {
                 Text(text = if (isLoading) "Loading..." else "Register")
             }
+
 
             if (errorMessage.isNotEmpty()) {
                 Text(text = errorMessage, color = Color.Red)
