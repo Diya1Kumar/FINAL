@@ -29,13 +29,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 val Kurale = FontFamily(
     Font(R.font.kurale_regular, FontWeight.Normal)
 )
 
 @Composable
-fun Main(navigateToLoginScreen: () -> Unit, navigateToRegisterScreen: () -> Unit) {
+fun Main(
+    navigateToLoginScreen: () -> Unit,
+    navigateToRegisterScreen: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -49,27 +53,22 @@ fun Main(navigateToLoginScreen: () -> Unit, navigateToRegisterScreen: () -> Unit
             )
         )
 
-        // Use a Row for all elements that should be aligned in the same line
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(vertical = 9.dp).padding(horizontal = 0.dp)// Adjust vertical padding as needed
+            modifier = Modifier.padding(vertical = 9.dp).padding(horizontal = 0.dp)
         ) {
-            // Login Button
-            TextButton(onClick = { navigateToLoginScreen() }) {
+            TextButton(onClick = navigateToLoginScreen) {
                 Text(
                     text = "Login",
                     color = Color(0xFF4D4DE5),
                     style = TextStyle(textDecoration = TextDecoration.Underline)
                 )
             }
-            // "or" Text
-            Text(
-                text = "or",
-                modifier = Modifier.padding(horizontal = 0.dp) // Space between buttons
-            )
-            // Register Button
-            TextButton(onClick = { navigateToRegisterScreen() }) {
+
+            Text(text = "or")
+
+            TextButton(onClick = navigateToRegisterScreen) {
                 Text(
                     text = "Register",
                     color = Color(0xFF4D4DE5),
@@ -81,12 +80,8 @@ fun Main(navigateToLoginScreen: () -> Unit, navigateToRegisterScreen: () -> Unit
                 )
             }
         }
-
-        // "with us" Text below the buttons
-
     }
 }
-
 
 
 @Preview(showBackground = true)
@@ -100,7 +95,6 @@ fun  MainPreview() {
             modifier = Modifier.fillMaxSize()
         )
 
-        Main(navigateToLoginScreen = {}, navigateToRegisterScreen = {})
 
     }
 }

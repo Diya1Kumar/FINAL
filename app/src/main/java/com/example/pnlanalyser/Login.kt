@@ -1,5 +1,6 @@
 package com.example.pnlanalyser
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,10 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pnlanalyser.network.LoginRequest
+import com.example.pnlanalyser.network.LoginResponse
+import com.example.pnlanalyser.network.RetrofitClient
+import retrofit2.Call
+
 
 @Composable
 fun Login(
@@ -59,53 +65,65 @@ fun Login(
             Spacer(modifier = Modifier.height(26.dp))
 
             // Username Field
-            Box(
+            TextField(
+                value = username.value,
+                onValueChange = { username.value = it },
+                singleLine = true,
+                placeholder = { Text(text = "Username") },
                 modifier = Modifier
                     .shadow(8.dp, RoundedCornerShape(12.dp))
                     .background(Color.White, shape = RoundedCornerShape(12.dp))
-                    .padding(0.dp)
-            ) {
-                TextField(
-                    value = username.value,
-                    onValueChange = { username.value = it },
-                    singleLine = true,
-                    placeholder = { Text(text = "Username") }
-                )
-            }
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Password Field
-            Box(
+            TextField(
+                value = password.value,
+                onValueChange = { password.value = it },
+                singleLine = true,
+                placeholder = { Text(text = "Password") },
                 modifier = Modifier
                     .shadow(8.dp, RoundedCornerShape(12.dp))
                     .background(Color.White, shape = RoundedCornerShape(12.dp))
-                    .padding(0.dp)
-            ) {
-                TextField(
-                    value = password.value,
-                    onValueChange = { password.value = it },
-                    singleLine = true,
-                    placeholder = { Text(text = "Password") }
-                )
-            }
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             // Login Button
             Button(
                 onClick = {
+                    isLoading = true
+                    val loginRequest = LoginRequest(username.value, password.value)
+                    RetrofitClient.apiService.login(loginRequest).enqueue(object : retrofit2.Callback<LoginResponse> {
+                        override fun onResponse(call: Call<LoginResponse>, response: retrofit2.Response<LoginResponse>) {
+                            isLoading = false
+                            if (response.isSuccessful) {
+                                // Save token (for example, in SharedPreferences)
+                                navigateToFirstScreen()
+                            } else {
+                                errorMessage = "Invalid credentials"
+                            }
+                        }
 
-                    navigateToFirstScreen() // Navigate to next screen if login successful
+                        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                            isLoading = false
+                            errorMessage = "Error: ${t.message}"
+                        }
+                    })
                 },
                 enabled = !isLoading
             ) {
                 Text(text = if (isLoading) "Loading..." else "Login")
             }
 
-            // Error message display
-            errorMessage?.let {
-                Text(text = it, color = Color.Red)
+            // Error message
+            if (!errorMessage.isNullOrEmpty()) {
+                Text(text = errorMessage!!, color = Color.Red, modifier = Modifier.padding(16.dp))
             }
         }
     }
